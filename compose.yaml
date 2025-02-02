@@ -1,20 +1,9 @@
 services:
 
-  proxy:
-    image: nginx:latest
-    ports:
-      - "80:80" # map internal port 80 to external port 80
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf # use custom nginx config
-    networks:
-      - stubs_network
-
   stub1:
     build: .
     image: stub_image
     container_name: stub1
-    ports:
-      - "1234:1234"
     networks:
       - stubs_network
     hostname: stub1
@@ -25,8 +14,6 @@ services:
     depends_on:
       - stub1
     pull_policy: never
-    ports:
-      - "1235:1234"
     networks:
       - stubs_network
     hostname: stub2
@@ -37,13 +24,37 @@ services:
     depends_on:
       - stub2
     pull_policy: never
-    ports:
-      - "1236:1234"
     networks:
       - stubs_network
     hostname: stub3
 
+  stub4:
+    image: stub_image
+    container_name: stub4
+    depends_on:
+      - stub3
+    pull_policy: never
+    networks:
+      - stubs_network
+    hostname: stub4
+
+  proxy:
+    image: nginx:latest
+    depends_on:
+      - stub1
+      - stub2
+      - stub3
+      - stub4
+    ports:
+      - "80:80" # map internal port 80 to external port 80
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf # use custom nginx config
+    networks:
+      - stubs_network
+      - external_network
+
 
 networks:
   stubs_network:
+  external_network:
     driver: bridge
