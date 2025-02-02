@@ -11,13 +11,13 @@ public class UuidEntry {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    private String uuid_value;
 
-    public UuidEntry () {}
+    private String uuidValue;
 
-    public UuidEntry(Integer id, String uuid_value) {
-        this.id = id;
-        this.uuid_value = uuid_value;
+    public UuidEntry() {}
+
+    public UuidEntry(String uuid_value) {
+        this.uuidValue = uuid_value;
     }
 
     public Integer get_id () {
@@ -25,12 +25,12 @@ public class UuidEntry {
     }
     
     public String get_uuid_value () {
-        return uuid_value;
+        return uuidValue;
     }
 
     @Override
     public String toString() {
-        return "{" + "id=" + this.id + ", UUID='" + this.uuid_value + '}';
+        return "UUID_OBJECT(" + "id=" + this.id + ", UUID='" + this.uuidValue + "')";
     }
 
 }
